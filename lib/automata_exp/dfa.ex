@@ -146,6 +146,32 @@ defmodule AutomataExp.DFA do
     }
   end
 
+  @doc """
+  Runs the given DFA.
+
+  This function makes the given DFA process the input charlist `chars`. The
+  automaton will read a character from `chars` and move around the states
+  according to the transition function.
+
+  If you additionally specify an accumulator value `acc` and a hook function
+  `hook_fn`, The automaton will call the `hook_fn` every time it does a
+  transition. `hook_fn` must take three arguments: the new state of the
+  automaton, the current accumulator, and a character the automaton just read.
+  And it must return the new value of the accumulator. For example, let's say
+  that a DFA in state `:foo` moved to state `:bar` by reading a character `a`,
+  and the current accumulator value is `100`. Then the hook function will be
+  called with arguments `:bar`, `100`, and `?a`.
+
+  ## Return Value
+
+  Values returned by this function are in the form of `{status, acc, rest}`.
+  `status` is one of `:accepted` or `:rejected`, and it indicates whether the
+  automaton has accepted or rejected the input charlist. `acc` is the final
+  value of the accumulator, which usually is meaningful only if `status` is
+  `:accepted`. And finally, `rest` is a part of the input charlist which has
+  not been read by the automaton before it halted. `rest` must be an empty list
+  if `status` is `:accepted`, obviously.
+  """
   @spec run(t(), charlist(), term(), hook_fn()) :: result()
   def run(dfa, chars, acc \\ nil, hook_fn \\ fn _, a, _ -> a end)
 
