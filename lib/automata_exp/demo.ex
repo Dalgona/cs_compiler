@@ -1,4 +1,11 @@
 defmodule AutomataExp.Demo do
+  @moduledoc """
+  Provides some demo functions of automata.
+
+  Source codes are available on
+  [GitHub](https://github.com/Dalgona/automata_exp).
+  """
+
   require AutomataExp.Macros
   import AutomataExp.Macros
   alias AutomataExp.DFA
