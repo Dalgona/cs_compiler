@@ -23,6 +23,12 @@ defmodule AutomataExp.Macros do
     end
   end
 
+  defp make_clause(state, {:.., _, [_, _]} = range, next_state) do
+    quote do
+      unquote(state), x when x in unquote(range) -> unquote(next_state)
+    end
+  end
+
   defp make_clause(state, [char], next_state) when is_integer(char) do
     quote do
       unquote(state), unquote(char) -> unquote(next_state)
