@@ -22,7 +22,14 @@ defmodule AutomataExp.DFA do
     :accepted_states
   ]
 
-  @type t :: %__MODULE__{}
+  @type t :: %__MODULE__{
+    states: MapSet.t(state()),
+    symbols: MapSet.t(integer()),
+    transition_fn: transition_fn(),
+    initial_state: state(),
+    accepted_states: MapSet.t(state())
+  }
+
   @type state :: term()
   @type transition_fn :: (state(), integer() -> state() | nil)
   @type hook_fn :: (state(), term(), integer() -> term())
@@ -84,6 +91,8 @@ defmodule AutomataExp.DFA do
   `AutomataExp.Macros.dfa_fn/1` macro to alleviate this problem.
 
   ```
+  # Make sure you import and require AutomataExp.Macros module.
+
   dfa_fn do
     # Single character
     :q0, ?a -> :q1
@@ -145,9 +154,9 @@ defmodule AutomataExp.DFA do
   end
 
   @spec do_run(t(), state(), charlist(), term(), hook_fn()) :: result()
-  def do_run(dfa, state, chars, acc, hook_fn)
+  defp do_run(dfa, state, chars, acc, hook_fn)
 
-  def do_run(dfa, state, [], acc, _hook_fn) do
+  defp do_run(dfa, state, [], acc, _hook_fn) do
     if MapSet.member?(dfa.accepted_states, state) do
       {:accepted, acc, []}
     else
@@ -155,7 +164,7 @@ defmodule AutomataExp.DFA do
     end
   end
 
-  def do_run(dfa, state, [char | chars], acc, hook_fn) do
+  defp do_run(dfa, state, [char | chars], acc, hook_fn) do
     case dfa.transition_fn.(state, char) do
       nil ->
         {:rejected, acc, [char | chars]}

@@ -1,4 +1,6 @@
 defmodule AutomataExp.Macros do
+  @moduledoc false
+
   # Macros for DFA
 
   defmacro dfa_fn(do: clauses) do
