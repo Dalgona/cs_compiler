@@ -1,0 +1,350 @@
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.18.3">
+    <title>AutomataExp.Demo – automata_exp v0.1.0</title>
+    <link rel="stylesheet" href="dist/app-480ffdc169.css" />
+    
+    <script src="dist/sidebar_items-2fae04e502.js"></script>
+    
+    
+    
+    
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
+
+    <div class="main">
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Sidebar</span>
+</button>
+<button class="sidebar-button night-mode-toggle">
+  <span class="icon-theme" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Theme</span>
+</button>
+<section class="sidebar">
+
+  
+  <a href="api-reference.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        automata_exp
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+    
+  </a>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="Search" aria-label="Search" autocomplete="off" />
+  </form>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+
+    
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">automata_exp v0.1.0</small>
+        AutomataExp.Demo
+        
+          <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/demo.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
+        
+      </h1>
+
+      
+        <section id="moduledoc">
+          <p>Provides some demo functions of automata.</p>
+<p>Source codes are available on
+<a href="https://github.com/Dalgona/automata_exp">GitHub</a>.</p>
+
+        </section>
+      
+
+      
+        <section id="summary" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#summary">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Summary
+          </h1>
+          
+
+          
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#check_parity/1">check_parity(chars)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Checks if the given charlist is a string of <code class="inline">0</code>s and <code class="inline">1</code>s where the number
+of <code class="inline">1</code>s is even</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#recognize_identifier/1">recognize_identifier(chars)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Recognizes an identifier name</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#recognize_integer/1">recognize_integer(chars)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Recognizes an integer literal and returns its value</p>
+</div>
+  
+</div>
+
+  </div>
+
+
+          
+
+        </section>
+      
+
+      
+
+      
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Functions
+          </h1>
+          <div class="detail" id="check_parity/1">
+  
+  
+  <div class="detail-header">
+    <a href="#check_parity/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">check_parity(chars)</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/demo.ex#L31" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>check_parity(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">charlist</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    <p>Checks if the given charlist is a string of <code class="inline">0</code>s and <code class="inline">1</code>s where the number
+of <code class="inline">1</code>s is even.</p>
+<p>If the number of <code class="inline">1</code>s is even, the automaton accepts the input.</p>
+<h2 id="check_parity/1-examples" class="section-heading">
+  <a href="#check_parity/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; check_parity(&#39;0000&#39;)
+{:accepted, nil, []}
+
+iex&gt; check_parity(&#39;0101&#39;)
+{:accepted, nil, []}
+
+iex&gt; check_parity(&#39;1101&#39;)
+{:rejected, nil, []}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="recognize_identifier/1">
+  
+  
+  <div class="detail-header">
+    <a href="#recognize_identifier/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">recognize_identifier(chars)</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/demo.ex#L72" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>recognize_identifier(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">charlist</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    <p>Recognizes an identifier name.</p>
+<p>In order for the automaton to accept the input, it must follow these rules:</p>
+<ul>
+<li>The first character must be a lowercase letter (<code class="inline">a-z</code>)
+  or an underscore (<code class="inline">_</code>).
+</li>
+<li>The rest of characters can be a mixture of lowercase letters,
+  an underscore, and decimal digits (<code class="inline">0-9</code>).
+</li>
+</ul>
+<h2 id="recognize_identifier/1-examples" class="section-heading">
+  <a href="#recognize_identifier/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; recognize_identifier(&#39;a&#39;)
+{:accepted, &quot;a&quot;, []}
+
+iex&gt; recognize_identifier(&#39;_&#39;)
+{:accepted, &quot;_&quot;, []}
+
+iex&gt; recognize_identifier(&#39;to_string&#39;)
+{:accepted, &quot;to_string&quot;, []}
+
+iex&gt; recognize_identifier(&#39;__callback&#39;)
+{:accepted, &quot;__callback&quot;, []}
+
+iex&gt; recognize_identifier(&#39;99_bottles_of_beer&#39;)
+{:rejected, &quot;&quot;, &#39;99_bottles_of_beer&#39;}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="recognize_integer/1">
+  
+  
+  <div class="detail-header">
+    <a href="#recognize_integer/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">recognize_integer(chars)</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/demo.ex#L129" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>recognize_integer(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">charlist</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    <p>Recognizes an integer literal and returns its value.</p>
+<p>See the examples below to see which formats are accepted.</p>
+<h2 id="recognize_integer/1-examples" class="section-heading">
+  <a href="#recognize_integer/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Examples
+</h2>
+
+<pre><code class="elixir"># Zero
+iex&gt; recognize_integer(&#39;0&#39;)
+{:accepted, 0, []}
+
+# Decimal
+iex&gt; recognize_integer(&#39;1234&#39;)
+{:accepted, 1234, []}
+
+# Octal
+iex&gt; recognize_integer(&#39;0755&#39;)
+{:accepted, 493, []}
+
+# Invalid octal
+iex&gt; recognize_integer(&#39;0493&#39;)
+{:rejected, 4, &#39;93&#39;}
+
+# Prefix for hexadecimal integer (invalid)
+iex&gt; recognize_integer(&#39;0x&#39;)
+{:rejected, 0, []}
+
+# Hexadecimal (in lowercase)
+iex&gt; recognize_integer(&#39;0xac00&#39;)
+{:accepted, 44032, []}
+
+# Hexadecimal (in mixed-case)
+iex&gt; recognize_integer(&#39;0XD7a3&#39;)
+{:accepted, 55203, []}
+
+# Invalid hexadecimal
+iex&gt; recognize_integer(&#39;0x12Z9&#39;)
+{:rejected, 18, &#39;Z9&#39;}</code></pre>
+
+  </section>
+</div>
+
+        </section>
+      
+
+      
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.18.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  <script src="dist/app-9bd040e5e5.js"></script>
+  
+  
+  
+  
+  </body>
+</html>
+

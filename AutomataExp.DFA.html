@@ -1,0 +1,548 @@
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.18.3">
+    <title>AutomataExp.DFA – automata_exp v0.1.0</title>
+    <link rel="stylesheet" href="dist/app-480ffdc169.css" />
+    
+    <script src="dist/sidebar_items-2fae04e502.js"></script>
+    
+    
+    
+    
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
+
+    <div class="main">
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Sidebar</span>
+</button>
+<button class="sidebar-button night-mode-toggle">
+  <span class="icon-theme" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Theme</span>
+</button>
+<section class="sidebar">
+
+  
+  <a href="api-reference.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        automata_exp
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+    
+  </a>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="Search" aria-label="Search" autocomplete="off" />
+  </form>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+
+    
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">automata_exp v0.1.0</small>
+        AutomataExp.DFA
+        
+          <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
+        
+      </h1>
+
+      
+        <section id="moduledoc">
+          <p>Deterministic Finite Automata (DFA)</p>
+<p>This module defines deterministic finite automata (DFA), which are usually
+used to recognize regular languages.</p>
+<p>Read the documentation for <a href="#new/5"><code class="inline">new/5</code></a> to learn how to define an automaton.
+The documentation for <a href="#run/4"><code class="inline">run/4</code></a> shows how to make the automaton do some work.
+Also, the following demo functions show typical usages of DFAs:</p>
+<ul>
+<li><a href="AutomataExp.Demo.html#check_parity/1"><code class="inline">AutomataExp.Demo.check_parity/1</code></a>
+</li>
+<li><a href="AutomataExp.Demo.html#recognize_identifier/1"><code class="inline">AutomataExp.Demo.recognize_identifier/1</code></a>
+</li>
+<li><a href="AutomataExp.Demo.html#recognize_integer/1"><code class="inline">AutomataExp.Demo.recognize_integer/1</code></a>
+</li>
+</ul>
+
+        </section>
+      
+
+      
+        <section id="summary" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#summary">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Summary
+          </h1>
+          
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:hook_fn/0">hook_fn()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:result/0">result()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:state/0">state()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:t/0">t()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:transition_fn/0">transition_fn()</a>
+  </div>
+  
+</div>
+
+  </div>
+
+
+          
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#new/5">new(q, s, d, q0, f)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Creates a new <code class="inline">DFA</code> struct</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#run/4">run(dfa, chars, acc \\ nil, hook_fn \\ fn _, a, _ -&gt; a end)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Runs the given DFA</p>
+</div>
+  
+</div>
+
+  </div>
+
+
+          
+
+        </section>
+      
+
+      
+        <section id="types" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Types
+          </h1>
+          <div class="types-list">
+            <div class="detail" id="t:hook_fn/0">
+  
+  
+  <div class="detail-header">
+    <a href="#t:hook_fn/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <span class="signature">hook_fn()</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L35" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>hook_fn() :: (<a href="#t:state/0">state</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() -> <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>())</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="t:result/0">
+  
+  
+  <div class="detail-header">
+    <a href="#t:result/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <span class="signature">result()</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L36" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>result() :: {:accepted | :rejected, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">charlist</a>()}</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="t:state/0">
+  
+  
+  <div class="detail-header">
+    <a href="#t:state/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <span class="signature">state()</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L33" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>state() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="t:t/0">
+  
+  
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <span class="signature">t()</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L25" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>t() :: %AutomataExp.DFA{
+  accepted_states: <a href="https://hexdocs.pm/elixir/MapSet.html#t:t/1">MapSet.t</a>(<a href="#t:state/0">state</a>()),
+  initial_state: <a href="#t:state/0">state</a>(),
+  states: <a href="https://hexdocs.pm/elixir/MapSet.html#t:t/1">MapSet.t</a>(<a href="#t:state/0">state</a>()),
+  symbols: <a href="https://hexdocs.pm/elixir/MapSet.html#t:t/1">MapSet.t</a>(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()),
+  transition_fn: <a href="#t:transition_fn/0">transition_fn</a>()
+}</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="t:transition_fn/0">
+  
+  
+  <div class="detail-header">
+    <a href="#t:transition_fn/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <span class="signature">transition_fn()</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L34" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>transition_fn() :: (<a href="#t:state/0">state</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() -> <a href="#t:state/0">state</a>() | nil)</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    
+  </section>
+</div>
+
+          </div>
+        </section>
+      
+
+      
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Functions
+          </h1>
+          <div class="detail" id="new/5">
+  
+  
+  <div class="detail-header">
+    <a href="#new/5" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">new(q, s, d, q0, f)</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L127" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>new([<a href="#t:state/0">state</a>()], <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">charlist</a>(), <a href="#t:transition_fn/0">transition_fn</a>(), <a href="#t:state/0">state</a>(), [<a href="#t:state/0">state</a>()]) :: <a href="#t:t/0">t</a>()</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    <p>Creates a new <code class="inline">DFA</code> struct.</p>
+<p>Use this function to define a deterministic finite automaton. Creating a
+struct directly using <code class="inline">%DFA{}</code> is not recommended.</p>
+<h2 id="new/5-arguments" class="section-heading">
+  <a href="#new/5-arguments" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Arguments
+</h2>
+
+<ul>
+<li><code class="inline">q</code>: A set of states a new automaton will have (Q).
+</li>
+<li><code class="inline">s</code>: A set of terminal symbols accepted by this automaton (Σ).
+</li>
+<li><code class="inline">d</code>: A transition function (δ). Read further for more information.
+</li>
+<li><code class="inline">q0</code>: A starting state (q₀ ∈ Q).
+</li>
+<li><code class="inline">f</code>: A set of accepting states (F ⊆ Q).
+</li>
+</ul>
+<p>Arguments <code class="inline">q</code>, <code class="inline">s</code>, and <code class="inline">f</code> accept lists, instead of <a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a>s, to minize
+the verbosity of your code. Those lists are converted into <a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a>s by this
+function. You can use any Elixir term for each state, but atoms are suitable
+for most of the cases. However, <code class="inline">s</code> must be a list of characters
+(<code class="inline">charlist</code>), such as <code class="inline">&#39;01&#39;</code>, <code class="inline">&#39;abcdefgh&#39;</code>, etc.</p>
+<h2 id="new/5-defining-a-transition-function-δ" class="section-heading">
+  <a href="#new/5-defining-a-transition-function-δ" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Defining a Transition Function (δ)
+</h2>
+
+<p>The following rules must be met for each transition function (δ):</p>
+<ul>
+<li>The function must accept two arguments. The first one is the current state
+  of the automaton, and the second one is the current input character.
+</li>
+<li>Each function clause must return the next state of the automaton.
+</li>
+<li>An extra function clause (<code class="inline">_, _ -&gt; nil</code>) shall follow the last defined
+  clause. This clause takes a role of ∅ (an empty set).
+</li>
+</ul>
+<p>Here are some examples of transition functions:</p>
+<pre><code class="elixir">fn
+  :even, ?0 -&gt; :even
+  :even, ?1 -&gt; :odd
+  :odd, ?0 -&gt; :odd
+  :odd, ?1 -&gt; :even
+  _, _ -&gt; nil
+end</code></pre>
+<pre><code class="elixir"># You can also use guards to accept a character in a range.
+fn
+  :first, x when x in ?a..?z -&gt; :rest
+  :rest, x when x in ?a..?z or x in ?0..?9 -&gt; :rest
+  _, _ -&gt; nil
+end</code></pre>
+<p>Most of the time, using guards to specify a range of accepted characters
+is tedious and requires a lot of keystrokes. You can use
+<code class="inline">AutomataExp.Macros.dfa_fn/1</code> macro to alleviate this problem.</p>
+<pre><code class="elixir"># Make sure you import and require AutomataExp.Macros module.
+
+dfa_fn do
+  # Single character
+  :q0, ?a -&gt; :q1
+
+  # Single range
+  :q1, ?w..?z -&gt; :q2
+
+  # A crazy combination
+  :q2, [?p, ?q, &#39;+-*/&#39;, ?0..?9] -&gt; :q3
+end</code></pre>
+<p>The code above is roughly transformed into this:</p>
+<pre><code class="elixir">fn
+  # Single character
+  :q0, ?a -&gt; :q1
+
+  # Single range
+  :q1, x when x in ?w..?z -&gt; :q2
+
+  # A crazy combination
+  :q2, x when x == ?p or x == ?q or x in &#39;+-*/&#39; or x in ?0..?9 -&gt; :q3
+
+  # This clause is automatically appended.
+  _, _ -&gt; nil
+end</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="run/4">
+  
+  
+    <span id="run/2"></span>
+  
+    <span id="run/3"></span>
+  
+  <div class="detail-header">
+    <a href="#run/4" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <span class="signature">run(dfa, chars, acc \\ nil, hook_fn \\ fn _, a, _ -&gt; a end)</span>
+    
+      <a href="https://github.com/Dalgona/automata_exp/blob/master/lib/automata_exp/dfa.ex#L178" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+    
+    
+    
+      <div class="specs">
+        
+          <pre>run(<a href="#t:t/0">t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">charlist</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), <a href="#t:hook_fn/0">hook_fn</a>()) :: <a href="#t:result/0">result</a>()</pre>
+        
+      </div>
+    
+  </div>
+  <section class="docstring">
+    <p>Runs the given DFA.</p>
+<p>This function makes the given DFA process the input charlist <code class="inline">chars</code>. The
+automaton will read a character from <code class="inline">chars</code> and move around the states
+according to the transition function.</p>
+<p>If you additionally specify an accumulator value <code class="inline">acc</code> and a hook function
+<code class="inline">hook_fn</code>, The automaton will call the <code class="inline">hook_fn</code> every time it does a
+transition. <code class="inline">hook_fn</code> must take three arguments: the new state of the
+automaton, the current accumulator, and a character the automaton just read.
+And it must return the new value of the accumulator. For example, let’s say
+that a DFA in state <code class="inline">:foo</code> moved to state <code class="inline">:bar</code> by reading a character <code class="inline">a</code>,
+and the current accumulator value is <code class="inline">100</code>. Then the hook function will be
+called with arguments <code class="inline">:bar</code>, <code class="inline">100</code>, and <code class="inline">?a</code>.</p>
+<h2 id="run/4-return-value" class="section-heading">
+  <a href="#run/4-return-value" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Return Value
+</h2>
+
+<p>Values returned by this function are in the form of <code class="inline">{status, acc, rest}</code>.
+<code class="inline">status</code> is one of <code class="inline">:accepted</code> or <code class="inline">:rejected</code>, and it indicates whether the
+automaton has accepted or rejected the input charlist. <code class="inline">acc</code> is the final
+value of the accumulator, which usually is meaningful only if <code class="inline">status</code> is
+<code class="inline">:accepted</code>. And finally, <code class="inline">rest</code> is a part of the input charlist which has
+not been read by the automaton before it halted. <code class="inline">rest</code> must be an empty list
+if <code class="inline">status</code> is <code class="inline">:accepted</code>, obviously.</p>
+
+  </section>
+</div>
+
+        </section>
+      
+
+      
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.18.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  <script src="dist/app-9bd040e5e5.js"></script>
+  
+  
+  
+  
+  </body>
+</html>
+
