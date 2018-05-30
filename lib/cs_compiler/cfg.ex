@@ -47,4 +47,22 @@ defmodule CSCompiler.CFG do
 
     {vn_set, vt_set, p, s}
   end
+
+  @spec nullables(t()) :: MapSet.t(nonterminal())
+  def nullables({_vn, _vt, p, _s}) do
+    vn_e = for {lhs, [nil]} <- p, into: MapSet.new(), do: lhs
+    update_nullables(vn_e, MapSet.new(), p)
+  end
+
+  @spec update_nullables(MapSet.t(nonterminal()), MapSet.t(nonterminal()), [prod]) ::
+          MapSet.t(nonterminal())
+  defp update_nullables(vn_e, vn_e_old, p)
+  defp update_nullables(vn_e, vn_e, _p), do: vn_e
+
+  defp update_nullables(vn_e, _vn_e_old, p) do
+    tmp =
+      for {lhs, rhs} <- p, Enum.all?(rhs, &MapSet.member?(vn_e, &1)), into: MapSet.new(), do: lhs
+
+    update_nullables(MapSet.union(vn_e, tmp), vn_e, p)
+  end
 end
