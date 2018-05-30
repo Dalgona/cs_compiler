@@ -23,6 +23,23 @@ defmodule CSCompiler.CFG do
 
     vn_set = MapSet.new(vn)
     vt_set = MapSet.new(vt)
+    accepted_rhs =
+      [nil]
+      |> MapSet.new()
+      |> MapSet.union(vn_set)
+      |> MapSet.union(vt_set)
+
+    Enum.each(p, fn {lhs, rhs} ->
+      unless MapSet.member?(vn_set, lhs) do
+        raise ArgumentError, "#{lhs} is not a member of vn"
+      end
+
+      Enum.each(rhs, fn sym ->
+        unless MapSet.member?(accepted_rhs, sym) do
+          raise ArgumentError, "invalid symbol #{sym} in production rules"
+        end
+      end)
+    end)
 
     unless MapSet.member?(vn_set, s) do
       raise ArgumentError, "'s' must be a member of 'vn'"
