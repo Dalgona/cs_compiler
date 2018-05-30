@@ -65,4 +65,37 @@ defmodule CSCompiler.CFG do
 
     update_nullables(MapSet.union(vn_e, tmp), vn_e, p)
   end
+
+  @spec ring_sum([MapSet.t()]) :: MapSet.t()
+  def ring_sum([set | sets]) do
+    do_ring_sum(sets, set)
+  end
+
+  @spec ring_sum(MapSet.t(), MapSet.t()) :: MapSet.t()
+  def ring_sum(set1, set2) do
+    if MapSet.member?(set1, nil) do
+      set1
+      |> MapSet.delete(nil)
+      |> MapSet.union(set2)
+    else
+      set1
+    end
+  end
+
+  @spec do_ring_sum([MapSet.t()], MapSet.t()) :: MapSet.t()
+  defp do_ring_sum(sets, acc)
+  defp do_ring_sum([], acc), do: acc
+
+  defp do_ring_sum([set | sets], acc) do
+    if MapSet.member?(acc, nil) do
+      new_acc =
+        acc
+        |> MapSet.delete(nil)
+        |> MapSet.union(set)
+
+      do_ring_sum(sets, new_acc)
+    else
+      acc
+    end
+  end
 end
