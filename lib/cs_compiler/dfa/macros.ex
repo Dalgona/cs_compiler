@@ -1,4 +1,4 @@
-defmodule CSCompiler.Macros do
+defmodule CSCompiler.DFA.Macros do
   @moduledoc false
 
   # Macros for DFA

@@ -1,4 +1,4 @@
-defmodule CSCompiler.Demo do
+defmodule CSCompiler.DFA.Demo do
   @moduledoc """
   Provides some demo functions of automata.
 
@@ -6,8 +6,8 @@ defmodule CSCompiler.Demo do
   [GitHub](https://github.com/Dalgona/cs_compiler).
   """
 
-  require CSCompiler.Macros
-  import CSCompiler.Macros
+  require CSCompiler.DFA.Macros
+  import CSCompiler.DFA.Macros
   alias CSCompiler.DFA
 
   @doc """
