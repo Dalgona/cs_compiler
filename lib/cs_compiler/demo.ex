@@ -1,14 +1,14 @@
-defmodule AutomataExp.Demo do
+defmodule CSCompiler.Demo do
   @moduledoc """
   Provides some demo functions of automata.
 
   Source codes are available on
-  [GitHub](https://github.com/Dalgona/automata_exp).
+  [GitHub](https://github.com/Dalgona/cs_compiler).
   """
 
-  require AutomataExp.Macros
-  import AutomataExp.Macros
-  alias AutomataExp.DFA
+  require CSCompiler.Macros
+  import CSCompiler.Macros
+  alias CSCompiler.DFA
 
   @doc """
   Checks if the given charlist is a string of `0`s and `1`s where the number

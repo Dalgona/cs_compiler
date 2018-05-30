@@ -1,4 +1,4 @@
-defmodule AutomataExp.DFA do
+defmodule CSCompiler.DFA do
   @moduledoc """
   Deterministic Finite Automata (DFA)
 
@@ -9,9 +9,9 @@ defmodule AutomataExp.DFA do
   The documentation for `run/4` shows how to make the automaton do some work.
   Also, the following demo functions show typical usages of DFAs:
 
-  * `AutomataExp.Demo.check_parity/1`
-  * `AutomataExp.Demo.recognize_identifier/1`
-  * `AutomataExp.Demo.recognize_integer/1`
+  * `CSCompiler.Demo.check_parity/1`
+  * `CSCompiler.Demo.recognize_identifier/1`
+  * `CSCompiler.Demo.recognize_integer/1`
   """
 
   defstruct [
@@ -88,10 +88,10 @@ defmodule AutomataExp.DFA do
 
   Most of the time, using guards to specify a range of accepted characters
   is tedious and requires a lot of keystrokes. You can use
-  `AutomataExp.Macros.dfa_fn/1` macro to alleviate this problem.
+  `CSCompiler.Macros.dfa_fn/1` macro to alleviate this problem.
 
   ```
-  # Make sure you import and require AutomataExp.Macros module.
+  # Make sure you import and require CSCompiler.Macros module.
 
   dfa_fn do
     # Single character

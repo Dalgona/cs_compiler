@@ -1,8 +1,8 @@
-defmodule AutomataExpTest do
+defmodule CSCompilerTest do
   use ExUnit.Case
-  doctest AutomataExp
+  doctest CSCompiler
 
   test "greets the world" do
-    assert AutomataExp.hello() == :world
+    assert CSCompiler.hello() == :world
   end
 end

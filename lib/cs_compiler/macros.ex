@@ -1,4 +1,4 @@
-defmodule AutomataExp.Macros do
+defmodule CSCompiler.Macros do
   @moduledoc false
 
   # Macros for DFA
