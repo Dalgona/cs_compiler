@@ -9,9 +9,11 @@ defmodule CSCompiler.CFG do
   @type nonterminal :: atom()
   @type terminal :: char()
   @type symbol :: nonterminal() | terminal() | nil
+  @type follower :: terminal | :end
   @type prod :: {nonterminal(), symbol()}
 
-  @typep first_table :: %{optional(nonterminal()) => MapSet.t(terminal())}
+  @type first_table :: %{optional(nonterminal()) => MapSet.t(terminal())}
+  @type follow_table :: %{optional(nonterminal()) => MapSet.t(follower())}
 
   @spec new([nonterminal()], [terminal()], [prod()], nonterminal()) :: t()
   def new(vn, vt, p, s) do
@@ -25,6 +27,7 @@ defmodule CSCompiler.CFG do
 
     vn_set = MapSet.new(vn)
     vt_set = MapSet.new(vt)
+
     accepted_rhs =
       [nil]
       |> MapSet.new()
@@ -115,6 +118,39 @@ defmodule CSCompiler.CFG do
 
   defp get_first(_table, a) when not is_atom(a), do: MapSet.new([a])
   defp get_first(table, x), do: table[x] || MapSet.new()
+
+  @spec build_follow(t()) :: follow_table()
+  def build_follow({_vn, _vt, p, s}) do
+    table = for {lhs, _} <- p, into: %{}, do: {lhs, MapSet.new()}
+    table = %{table | s => MapSet.new([:end])}
+
+#    table =
+#      Enum.reduce(p, table, fn {_lhs, rhs}, acc ->
+#        case follow_rule_1([nil | rhs], []) do
+#          [] ->
+#            acc
+#
+#          list ->
+#            IO.inspect list
+#        end
+#      end)
+
+    p
+    |> Enum.map(fn {_lhs, rhs} -> follow_rule_1([nil | rhs], []) end)
+    |> List.flatten()
+  end
+
+  @spec follow_rule_1([symbol()], [[symbol()]]) :: any # TODO
+  defp follow_rule_1(sentential_form, acc)
+  defp follow_rule_1([], acc), do: acc
+
+  defp follow_rule_1([_a, x, b | bs], acc) when is_atom(x) and not is_nil(b) do
+    follow_rule_1([x, b | bs], [{x, [b | bs]} | acc])
+  end
+
+  defp follow_rule_1([_a | as], acc) do
+    follow_rule_1(as, acc)
+  end
 
   @spec ring_sum([MapSet.t()]) :: MapSet.t()
   def ring_sum([set | sets]) do
