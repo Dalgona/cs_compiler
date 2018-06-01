@@ -4,13 +4,14 @@ defmodule CSCompiler.CFG.LL1 do
   @type nonterminal :: CFG.nonterminal()
   @type terminal :: CFG.terminal()
   @type symbol :: CFG.symbol()
-  @type follower :: terminal | :end
+  @type follower :: terminal() | :end
   @type prod :: CFG.prod()
   @type set :: MapSet.t()
   @type set(type) :: MapSet.t(type)
 
   @type first_table :: %{optional(nonterminal()) => set(terminal())}
   @type follow_table :: %{optional(nonterminal()) => set(follower())}
+  @type ll1_table :: %{optional(nonterminal()) => %{optional(follower()) => prod()}}
 
   @spec ll1_test(CFG.t()) :: boolean()
   def ll1_test(cfg) do
@@ -38,7 +39,7 @@ defmodule CSCompiler.CFG.LL1 do
     |> Enum.all?(&Enum.empty?/1)
   end
 
-  @spec build_ll_table(CFG.t(), first_table(), follow_table()) :: any() # TODO
+  @spec build_ll_table(CFG.t(), first_table(), follow_table()) :: ll1_table()
   def build_ll_table({vn, _vt, p, _s}, first, follow) do
     table = for v <- vn, into: %{}, do: {v, %{}}
 
