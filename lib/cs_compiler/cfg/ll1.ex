@@ -39,8 +39,8 @@ defmodule CSCompiler.CFG.LL1 do
     |> Enum.all?(&Enum.empty?/1)
   end
 
-  @spec build_ll_table(CFG.t(), first_table(), follow_table()) :: ll1_table()
-  def build_ll_table({vn, _vt, p, _s}, first, follow) do
+  @spec build_ll1_table(CFG.t(), first_table(), follow_table()) :: ll1_table()
+  def build_ll1_table({vn, _vt, p, _s}, first, follow) do
     table = for v <- vn, into: %{}, do: {v, %{}}
 
     p
