@@ -1,7 +1,7 @@
 defmodule CSCompiler.CFG do
   @type t :: {
-          MapSet.t(nonterminal()),
-          MapSet.t(terminal),
+          set(nonterminal()),
+          set(terminal),
           [prod()],
           nonterminal()
         }
@@ -11,9 +11,11 @@ defmodule CSCompiler.CFG do
   @type symbol :: nonterminal() | terminal() | nil
   @type follower :: terminal | :end
   @type prod :: {nonterminal(), symbol()}
+  @type set :: MapSet.t()
+  @type set(type) :: MapSet.t(type)
 
-  @type first_table :: %{optional(nonterminal()) => MapSet.t(terminal())}
-  @type follow_table :: %{optional(nonterminal()) => MapSet.t(follower())}
+  @type first_table :: %{optional(nonterminal()) => set(terminal())}
+  @type follow_table :: %{optional(nonterminal()) => set(follower())}
 
   @spec new([nonterminal()], [terminal()], [prod()], nonterminal()) :: t()
   def new(vn, vt, p, s) do
@@ -53,14 +55,13 @@ defmodule CSCompiler.CFG do
     {vn_set, vt_set, p, s}
   end
 
-  @spec nullables(t()) :: MapSet.t(nonterminal())
+  @spec nullables(t()) :: set(nonterminal())
   def nullables({_vn, _vt, p, _s}) do
     vn_e = for {lhs, [nil]} <- p, into: MapSet.new(), do: lhs
     update_nullables(vn_e, MapSet.new(), p)
   end
 
-  @spec update_nullables(MapSet.t(nonterminal()), MapSet.t(nonterminal()), [prod]) ::
-          MapSet.t(nonterminal())
+  @spec update_nullables(set(nonterminal()), set(nonterminal()), [prod]) :: set(nonterminal())
   defp update_nullables(vn_e, vn_e_old, p)
   defp update_nullables(vn_e, vn_e, _p), do: vn_e
 
@@ -107,7 +108,7 @@ defmodule CSCompiler.CFG do
     do_build_first(new_table, table, p)
   end
 
-  @spec get_first(list() | symbol(), first_table()) :: MapSet.t(terminal())
+  @spec get_first(list() | symbol(), first_table()) :: set(terminal())
   defp get_first(symbol_or_sentential_form, table)
 
   defp get_first([sym | syms], table) do
@@ -144,7 +145,7 @@ defmodule CSCompiler.CFG do
     do_build_follow(table, %{}, p, vt_e)
   end
 
-  @spec do_build_follow(follow_table(), follow_table(), [prod()], MapSet.t(nonterminal())) ::
+  @spec do_build_follow(follow_table(), follow_table(), [prod()], set(nonterminal())) ::
           follow_table()
   defp do_build_follow(table, table_old, p, vt_e)
   defp do_build_follow(table, table, _p, _vt_e), do: table
@@ -183,7 +184,7 @@ defmodule CSCompiler.CFG do
     end)
   end
 
-  @spec follow_rule_3([prod()], MapSet.t(nonterminal())) :: {nonterminal(), nonterminal()}
+  @spec follow_rule_3([prod()], set(nonterminal())) :: {nonterminal(), nonterminal()}
   defp follow_rule_3(p, vt_e) do
     p
     |> Stream.map(fn {lhs, rhs} ->
@@ -200,12 +201,12 @@ defmodule CSCompiler.CFG do
     |> Enum.uniq()
   end
 
-  @spec ring_sum([MapSet.t()]) :: MapSet.t()
+  @spec ring_sum([set()]) :: set()
   def ring_sum([set | sets]) do
     do_ring_sum(sets, set)
   end
 
-  @spec ring_sum(MapSet.t(), MapSet.t()) :: MapSet.t()
+  @spec ring_sum(set(), set()) :: set()
   def ring_sum(set1, set2) do
     if MapSet.member?(set1, nil) do
       set1
@@ -216,7 +217,7 @@ defmodule CSCompiler.CFG do
     end
   end
 
-  @spec do_ring_sum([MapSet.t()], MapSet.t()) :: MapSet.t()
+  @spec do_ring_sum([set()], set()) :: set()
   defp do_ring_sum(sets, acc)
   defp do_ring_sum([], acc), do: acc
 
