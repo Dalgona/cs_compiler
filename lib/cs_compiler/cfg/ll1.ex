@@ -11,7 +11,6 @@ defmodule CSCompiler.CFG.LL1 do
 
   @type first_table :: %{optional(nonterminal()) => set(terminal())}
   @type follow_table :: %{optional(nonterminal()) => set(follower())}
-  @type ll1_table :: %{optional(nonterminal()) => %{optional(follower()) => prod()}}
 
   @spec ll1_test(CFG.t()) :: boolean()
   def ll1_test(cfg) do
@@ -37,35 +36,6 @@ defmodule CSCompiler.CFG.LL1 do
       List.foldl(xs, x, &MapSet.intersection/2)
     end)
     |> Enum.all?(&Enum.empty?/1)
-  end
-
-  @spec build_ll1_table(CFG.t(), first_table(), follow_table()) :: ll1_table()
-  def build_ll1_table({vn, _vt, p, _s}, first, follow) do
-    table = for v <- vn, into: %{}, do: {v, %{}}
-
-    p
-    |> Enum.map(fn {lhs, rhs} = prod ->
-      first_of_rhs = get_first(rhs, first)
-      follow_of_lhs = follow[lhs]
-
-      temp1 =
-        first_of_rhs
-        |> Enum.reject(&is_nil/1)
-        |> Enum.map(&{lhs, &1, prod})
-
-      temp2 =
-        if nil in first_of_rhs do
-          Enum.map(follow_of_lhs, &{lhs, &1, prod})
-        else
-          []
-        end
-
-      temp1 ++ temp2
-    end)
-    |> List.flatten()
-    |> Enum.reduce(table, fn {nt, t, prod}, acc ->
-      put_in(acc, [nt, t], prod)
-    end)
   end
 
   @spec build_first(CFG.t()) :: first_table()
@@ -105,19 +75,19 @@ defmodule CSCompiler.CFG.LL1 do
   end
 
   @spec get_first(list() | symbol(), first_table()) :: set(terminal())
-  defp get_first(symbol_or_sentential_form, table)
+  def get_first(symbol_or_sentential_form, table)
 
-  defp get_first([sym | syms], table) do
+  def get_first([sym | syms], table) do
     [sym | syms]
     |> Enum.map(&get_first(&1, table))
     |> ring_sum()
   end
 
-  defp get_first(x, table) when is_atom(x) and not is_nil(x) do
+  def get_first(x, table) when is_atom(x) and not is_nil(x) do
     table[x] || MapSet.new()
   end
 
-  defp get_first(a, _table), do: MapSet.new([a])
+  def get_first(a, _table), do: MapSet.new([a])
 
   @spec build_follow(CFG.t(), first_table(), set(nonterminal())) :: follow_table()
   def build_follow({_vn, _vt, p, s}, first, vn_e) do
