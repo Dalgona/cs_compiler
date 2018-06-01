@@ -121,7 +121,7 @@ defmodule CSCompiler.CFG do
   defp get_first(x, table), do: table[x] || MapSet.new()
 
   @spec build_follow(t(), first_table(), set(nonterminal())) :: follow_table()
-  def build_follow({_vn, _vt, p, s}, first, vt_e) do
+  def build_follow({_vn, _vt, p, s}, first, vn_e) do
     table = for {lhs, _} <- p, into: %{}, do: {lhs, MapSet.new()}
     table = %{table | s => MapSet.new([:end])}
 
@@ -139,23 +139,23 @@ defmodule CSCompiler.CFG do
         |> MapSet.union(v2)
       end)
 
-    do_build_follow(table, %{}, p, vt_e)
+    do_build_follow(table, %{}, p, vn_e)
   end
 
   @spec do_build_follow(follow_table(), follow_table(), [prod()], set(nonterminal())) ::
           follow_table()
-  defp do_build_follow(table, table_old, p, vt_e)
-  defp do_build_follow(table, table, _p, _vt_e), do: table
+  defp do_build_follow(table, table_old, p, vn_e)
+  defp do_build_follow(table, table, _p, _vn_e), do: table
 
-  defp do_build_follow(table, _table_old, p, vt_e) do
-    targets = follow_rule_2(p) ++ follow_rule_3(p, vt_e)
+  defp do_build_follow(table, _table_old, p, vn_e) do
+    targets = follow_rule_2(p) ++ follow_rule_3(p, vn_e)
 
     new_table =
       Enum.reduce(targets, table, fn {b, a}, acc ->
         %{acc | b => MapSet.union(acc[b], acc[a])}
       end)
 
-    do_build_follow(new_table, table, p, vt_e)
+    do_build_follow(new_table, table, p, vn_e)
   end
 
   @spec follow_rule_1([symbol()], [[symbol()]]) :: [{nonterminal(), [symbol()]}]
@@ -182,13 +182,13 @@ defmodule CSCompiler.CFG do
   end
 
   @spec follow_rule_3([prod()], set(nonterminal())) :: {nonterminal(), nonterminal()}
-  defp follow_rule_3(p, vt_e) do
+  defp follow_rule_3(p, vn_e) do
     p
     |> Stream.map(fn {lhs, rhs} ->
       target =
         [nil | rhs]
         |> follow_rule_1([])
-        |> Enum.filter(fn {_lhs, rhs} -> Enum.all?(rhs, &(&1 in vt_e)) end)
+        |> Enum.filter(fn {_lhs, rhs} -> Enum.all?(rhs, &(&1 in vn_e)) end)
 
       {lhs, target}
     end)
