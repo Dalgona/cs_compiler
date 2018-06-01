@@ -198,6 +198,32 @@ defmodule CSCompiler.CFG do
     |> Enum.uniq()
   end
 
+  @spec ll?(t()) :: boolean()
+  def ll?(cfg) do
+    vn_e = nullables(cfg)
+    first = build_first(cfg)
+    follow = build_follow(cfg, first, vn_e)
+
+    ll?(cfg, first, follow)
+  end
+
+  @spec ll?(t(), first_table(), follow_table()) :: boolean()
+  def ll?({_vn, _vt, p, _s}, first, follow) do
+    p
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> Stream.filter(fn {_lhs, rhs_list} -> length(rhs_list) > 1 end)
+    |> Stream.map(fn {lhs, rhs_list} ->
+      [x | xs] =
+        Enum.map(rhs_list, fn
+          [nil] -> follow[lhs]
+          rhs -> get_first(rhs, first)
+        end)
+
+      List.foldl(xs, x, &MapSet.intersection/2)
+    end)
+    |> Enum.all?(&Enum.empty?/1)
+  end
+
   @spec ring_sum([set()]) :: set()
   def ring_sum([set | sets]) do
     do_ring_sum(sets, set)
