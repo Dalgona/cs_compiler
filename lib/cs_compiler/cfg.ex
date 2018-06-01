@@ -120,27 +120,48 @@ defmodule CSCompiler.CFG do
   defp get_first(table, x), do: table[x] || MapSet.new()
 
   @spec build_follow(t()) :: follow_table()
-  def build_follow({_vn, _vt, p, s}) do
+  def build_follow({_vn, _vt, p, s} = cfg) do
+    first = build_first(cfg)
+    vt_e = nullables(cfg)
+
     table = for {lhs, _} <- p, into: %{}, do: {lhs, MapSet.new()}
     table = %{table | s => MapSet.new([:end])}
 
-#    table =
-#      Enum.reduce(p, table, fn {_lhs, rhs}, acc ->
-#        case follow_rule_1([nil | rhs], []) do
-#          [] ->
-#            acc
-#
-#          list ->
-#            IO.inspect list
-#        end
-#      end)
+    table =
+      p
+      |> Enum.map(fn {_lhs, rhs} -> follow_rule_1([nil | rhs], []) end)
+      |> List.flatten()
+      |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+      |> Map.new(fn {k, v} ->
+        v2 = v |> List.flatten() |> Enum.uniq()
+        {k, get_first(first, v2)}
+      end)
+      |> Map.merge(table, fn _k, v1, v2 ->
+        v1
+        |> MapSet.delete(nil)
+        |> MapSet.union(v2)
+      end)
 
-    p
-    |> Enum.map(fn {_lhs, rhs} -> follow_rule_1([nil | rhs], []) end)
-    |> List.flatten()
+    do_build_follow(table, %{}, p, vt_e)
   end
 
-  @spec follow_rule_1([symbol()], [[symbol()]]) :: any # TODO
+  @spec do_build_follow(follow_table(), follow_table(), [prod()], MapSet.t(nonterminal())) ::
+          follow_table()
+  defp do_build_follow(table, table_old, p, vt_e)
+  defp do_build_follow(table, table, _p, _vt_e), do: table
+
+  defp do_build_follow(table, _table_old, p, vt_e) do
+    targets = follow_rule_2(p) ++ follow_rule_3(p, vt_e)
+
+    new_table =
+      Enum.reduce(targets, table, fn {b, a}, acc ->
+        %{acc | b => MapSet.union(acc[b], acc[a])}
+      end)
+
+    do_build_follow(new_table, table, p, vt_e)
+  end
+
+  @spec follow_rule_1([symbol()], [[symbol()]]) :: [{nonterminal(), [symbol()]}]
   defp follow_rule_1(sentential_form, acc)
   defp follow_rule_1([], acc), do: acc
 
@@ -150,6 +171,34 @@ defmodule CSCompiler.CFG do
 
   defp follow_rule_1([_a | as], acc) do
     follow_rule_1(as, acc)
+  end
+
+  @spec follow_rule_2([prod()]) :: {nonterminal(), nonterminal()}
+  defp follow_rule_2(p) do
+    p
+    |> Stream.map(fn {lhs, rhs} ->
+      {rhs |> Enum.reverse() |> List.first(), lhs}
+    end)
+    |> Enum.filter(fn {b, a} ->
+      is_atom(b) and not is_nil(b) and b != a
+    end)
+  end
+
+  @spec follow_rule_3([prod()], MapSet.t(nonterminal())) :: {nonterminal(), nonterminal()}
+  defp follow_rule_3(p, vt_e) do
+    p
+    |> Stream.map(fn {lhs, rhs} ->
+      target =
+        [nil | rhs]
+        |> follow_rule_1([])
+        |> Enum.filter(fn {_lhs, rhs} -> Enum.all?(rhs, &(&1 in vt_e)) end)
+
+      {lhs, target}
+    end)
+    |> Stream.reject(fn {_lhs, rhs} -> Enum.empty?(rhs) end)
+    |> Enum.map(fn {a, bs} -> Enum.map(bs, fn {b, _} -> {b, a} end) end)
+    |> List.flatten()
+    |> Enum.uniq()
   end
 
   @spec ring_sum([MapSet.t()]) :: MapSet.t()
