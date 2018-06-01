@@ -120,11 +120,8 @@ defmodule CSCompiler.CFG do
   defp get_first(a, _table) when not is_atom(a), do: MapSet.new([a])
   defp get_first(x, table), do: table[x] || MapSet.new()
 
-  @spec build_follow(t()) :: follow_table()
-  def build_follow({_vn, _vt, p, s} = cfg) do
-    first = build_first(cfg)
-    vt_e = nullables(cfg)
-
+  @spec build_follow(t(), first_table(), set(nonterminal())) :: follow_table()
+  def build_follow({_vn, _vt, p, s}, first, vt_e) do
     table = for {lhs, _} <- p, into: %{}, do: {lhs, MapSet.new()}
     table = %{table | s => MapSet.new([:end])}
 
