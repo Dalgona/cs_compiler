@@ -101,23 +101,23 @@ defmodule CSCompiler.CFG do
           acc
 
         {lhs, rhs}, acc ->
-          %{acc | lhs => MapSet.union(acc[lhs], get_first(acc, rhs))}
+          %{acc | lhs => MapSet.union(acc[lhs], get_first(rhs, acc))}
       end)
 
     do_build_first(new_table, table, p)
   end
 
-  @spec get_first(first_table(), list() | symbol()) :: MapSet.t(terminal())
-  defp get_first(table, symbol_or_sentential_form)
+  @spec get_first(list() | symbol(), first_table()) :: MapSet.t(terminal())
+  defp get_first(symbol_or_sentential_form, table)
 
-  defp get_first(table, [sym | syms]) do
+  defp get_first([sym | syms], table) do
     [sym | syms]
-    |> Enum.map(&get_first(table, &1))
+    |> Enum.map(&get_first(&1, table))
     |> ring_sum()
   end
 
-  defp get_first(_table, a) when not is_atom(a), do: MapSet.new([a])
-  defp get_first(table, x), do: table[x] || MapSet.new()
+  defp get_first(a, _table) when not is_atom(a), do: MapSet.new([a])
+  defp get_first(x, table), do: table[x] || MapSet.new()
 
   @spec build_follow(t()) :: follow_table()
   def build_follow({_vn, _vt, p, s} = cfg) do
@@ -133,8 +133,7 @@ defmodule CSCompiler.CFG do
       |> List.flatten()
       |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
       |> Map.new(fn {k, v} ->
-        v2 = v |> List.flatten() |> Enum.uniq()
-        {k, get_first(first, v2)}
+        {k, v |> List.flatten() |> Enum.uniq() |> get_first(first)}
       end)
       |> Map.merge(table, fn _k, v1, v2 ->
         v1
