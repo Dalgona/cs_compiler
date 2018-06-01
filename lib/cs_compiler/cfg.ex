@@ -117,8 +117,11 @@ defmodule CSCompiler.CFG do
     |> ring_sum()
   end
 
-  defp get_first(a, _table) when not is_atom(a), do: MapSet.new([a])
-  defp get_first(x, table), do: table[x] || MapSet.new()
+  defp get_first(x, table) when is_atom(x) and not is_nil(x) do
+    table[x] || MapSet.new()
+  end
+
+  defp get_first(a, _table), do: MapSet.new([a])
 
   @spec build_follow(t(), first_table(), set(nonterminal())) :: follow_table()
   def build_follow({_vn, _vt, p, s}, first, vn_e) do
