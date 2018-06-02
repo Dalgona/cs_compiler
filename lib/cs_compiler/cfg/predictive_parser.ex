@@ -15,11 +15,13 @@ defmodule CSCompiler.CFG.PredictiveParser do
           }
         }
 
+  @type input :: [input_sym()]
+  @type stack :: [stack_sym()]
   @type input_sym :: CFG.terminal() | :end
   @type stack_sym :: CFG.symbol() | :end
   @type parse_tree :: {CFG.symbol(), [parse_tree()]}
-  @type parse_error :: {:error, [input_sym()]}
-  @typep make_tree_result :: {parse_tree(), [input_sym()], [stack_sym()]}
+  @type parse_error :: {:error, input()}
+  @typep make_tree_result :: {parse_tree(), input(), stack()}
 
   @spec new(CFG.t()) :: t()
   def new(cfg) do
@@ -82,7 +84,7 @@ defmodule CSCompiler.CFG.PredictiveParser do
     end
   end
 
-  @spec make_tree([input_sym()], [stack_sym()], table()) :: make_tree_result() | parse_error()
+  @spec make_tree(input(), stack(), table()) :: make_tree_result() | parse_error()
   defp make_tree(input, stack, table)
 
   defp make_tree([x | input], [x | stack], _table) do
@@ -114,8 +116,8 @@ defmodule CSCompiler.CFG.PredictiveParser do
     {:error, input}
   end
 
-  @spec make_tree_rec([CFG.symbol()], [input_sym()], [stack_sym()], table(), [parse_tree()]) ::
-          {[parse_tree()], [input_sym()], [stack_sym()]} | parse_error()
+  @spec make_tree_rec([CFG.symbol()], input(), stack(), table(), [parse_tree()]) ::
+          {[parse_tree()], input(), stack()} | parse_error()
   defp make_tree_rec(rhs, input, stack, table, acc)
 
   defp make_tree_rec([], input, stack, _table, acc) do
@@ -132,7 +134,7 @@ defmodule CSCompiler.CFG.PredictiveParser do
     end
   end
 
-  @spec remove_trailing_end([input_sym()]) :: [input_sym()]
+  @spec remove_trailing_end(input()) :: input()
   defp remove_trailing_end(input) do
     input
     |> Enum.reverse()
