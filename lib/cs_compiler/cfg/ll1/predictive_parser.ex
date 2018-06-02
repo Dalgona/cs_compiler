@@ -17,6 +17,8 @@ defmodule CSCompiler.CFG.LL1.PredictiveParser do
 
   @type input_sym :: CFG.terminal() | :end
   @type stack_sym :: CFG.symbol() | :end
+  @type parse_tree :: {CFG.symbol(), [parse_tree()]}
+  @type parse_result :: {:ok, parse_tree()} | {:error, [input_sym()]}
 
   @spec new(CFG.t()) :: t()
   def new(cfg) do
@@ -66,30 +68,66 @@ defmodule CSCompiler.CFG.LL1.PredictiveParser do
   def run(chars, %__MODULE__{cfg: {_, _, _, s}, table: table}) do
     input = Enum.reverse([:end | Enum.reverse(chars)])
     stack = [s, :end]
+    remove_trailing_end =
+      fn input -> input |> Enum.reverse() |> tl() |> Enum.reverse() end
 
-    do_run(input, stack, table)
-  end
+    case make_tree(input, stack, table) do
+      {{:node, _, _} = node, [:end], [:end]} ->
+        {:ok, node}
 
-  @spec do_run([input_sym()], [stack_sym()], table()) :: any() # TODO
-  defp do_run(input, stack, table)
+      {{:node, _, _}, rest_input, _} ->
+        {:error, remove_trailing_end.(rest_input)}
 
-  defp do_run([:end], [:end], _table) do
-    :accepted
-  end
-
-  defp do_run([x | input], [x | stack], table) do
-    do_run(input, stack, table)
-  end
-
-  defp do_run([x | input], [tos | stack], table) do
-    case get_in(table, [tos, x]) do
-      {_lhs, [nil]} -> do_run([x | input], stack, table)
-      {_lhs, rhs} -> do_run([x | input], List.flatten([rhs | stack]), table)
-      nil -> :error
+      {:error, rest_input} ->
+        {:error, remove_trailing_end.(rest_input)}
     end
   end
 
-  defp do_run(_, _, _table) do
-    :error
+  @spec make_tree([input_sym()], [stack_sym()], table()) :: any() # TODO
+  defp make_tree(input, stack, table)
+
+  defp make_tree([x | input], [x | stack], _table) do
+    {{:node, x, []}, input, stack}
+  end
+
+  defp make_tree([a | _as] = input, [tos | stack], table) do
+    case get_in(table, [tos, a]) do
+      nil ->
+        {:error, input}
+
+      {lhs, [nil]} ->
+        {{:node, lhs, []}, input, stack}
+
+      {lhs, rhs} ->
+        expanded = List.flatten([rhs | stack])
+        init_acc = {input, expanded, []}
+
+        case Enum.reduce(rhs, init_acc, &make_tree_rec(&1, &2, table)) do
+          {rest_input, rest_stack, results} ->
+            {{:node, lhs, Enum.reverse(results)}, rest_input, rest_stack}
+
+          {:error, _} = error ->
+            error
+        end
+    end
+  end
+
+  defp make_tree(input, _stack, _table) do
+    {:error, input}
+  end
+
+  @spec make_tree_rec(stack_sym(), term(), table()) :: any() # TODO
+  defp make_tree_rec(_, {:error, _} = error, _table) do
+    error
+  end
+
+  defp make_tree_rec(_, {input, stack, results}, table) do
+    case make_tree(input, stack, table) do
+      {tree, rest_input, rest_stack} ->
+        {rest_input, rest_stack, [tree | results]}
+
+      {:error, _} = error ->
+        error
+    end
   end
 end
