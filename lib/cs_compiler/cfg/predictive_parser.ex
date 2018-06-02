@@ -70,18 +70,16 @@ defmodule CSCompiler.CFG.PredictiveParser do
   def run(chars, %__MODULE__{cfg: {_, _, _, s}, table: table}) do
     input = Enum.reverse([:end | Enum.reverse(chars)])
     stack = [s, :end]
-    remove_trailing_end =
-      fn input -> input |> Enum.reverse() |> tl() |> Enum.reverse() end
 
     case make_tree(input, stack, table) do
       {{:node, _, _} = node, [:end], [:end]} ->
         {:ok, node}
 
       {{:node, _, _}, rest_input, _} ->
-        {:error, remove_trailing_end.(rest_input)}
+        {:error, remove_trailing_end(rest_input)}
 
       {:error, rest_input} ->
-        {:error, remove_trailing_end.(rest_input)}
+        {:error, remove_trailing_end(rest_input)}
     end
   end
 
@@ -134,5 +132,13 @@ defmodule CSCompiler.CFG.PredictiveParser do
       {:error, _} = error ->
         error
     end
+  end
+
+  @spec remove_trailing_end([input_sym()]) :: [input_sym()]
+  defp remove_trailing_end(input) do
+    input
+    |> Enum.reverse()
+    |> tl()
+    |> Enum.reverse()
   end
 end
