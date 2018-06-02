@@ -18,7 +18,9 @@ defmodule CSCompiler.CFG.PredictiveParser do
   @type input_sym :: CFG.terminal() | :end
   @type stack_sym :: CFG.symbol() | :end
   @type parse_tree :: {CFG.symbol(), [parse_tree()]}
-  @type parse_result :: {:ok, parse_tree()} | {:error, [input_sym()]}
+  @type parse_error :: {:error, [input_sym()]}
+  @typep make_tree_result :: {parse_tree(), [input_sym()], [stack_sym()]}
+  @typep make_tree_rec_arg :: {[input_sym()], [stack_sym()], [make_tree_result()]}
 
   @spec new(CFG.t()) :: t()
   def new(cfg) do
@@ -62,7 +64,7 @@ defmodule CSCompiler.CFG.PredictiveParser do
     end)
   end
 
-  @spec run([CFG.terminal()], t()) :: any() # TODO
+  @spec run([CFG.terminal()], t()) :: {:ok, parse_tree()} | parse_error()
   def run(chars, parser)
 
   def run(chars, %__MODULE__{cfg: {_, _, _, s}, table: table}) do
@@ -83,7 +85,7 @@ defmodule CSCompiler.CFG.PredictiveParser do
     end
   end
 
-  @spec make_tree([input_sym()], [stack_sym()], table()) :: any() # TODO
+  @spec make_tree([input_sym()], [stack_sym()], table()) :: make_tree_result() | parse_error()
   defp make_tree(input, stack, table)
 
   defp make_tree([x | input], [x | stack], _table) do
@@ -116,7 +118,10 @@ defmodule CSCompiler.CFG.PredictiveParser do
     {:error, input}
   end
 
-  @spec make_tree_rec(stack_sym(), term(), table()) :: any() # TODO
+  @spec make_tree_rec(stack_sym(), make_tree_rec_arg() | parse_error(), table()) ::
+          make_tree_rec_arg() | parse_error()
+  defp make_tree_rec(unused, arg, table)
+
   defp make_tree_rec(_, {:error, _} = error, _table) do
     error
   end
