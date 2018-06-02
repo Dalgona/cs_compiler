@@ -1,4 +1,4 @@
-defmodule CSCompiler.CFG.LL1.PredictiveParser do
+defmodule CSCompiler.CFG.PredictiveParser do
   alias CSCompiler.CFG
   alias CSCompiler.CFG.LL1
 
