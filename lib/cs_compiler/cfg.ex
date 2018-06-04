@@ -7,7 +7,7 @@ defmodule CSCompiler.CFG do
         }
 
   @type nonterminal :: atom()
-  @type terminal :: char()
+  @type terminal :: term()
   @type symbol :: nonterminal() | terminal() | nil
   @type prod :: {nonterminal(), symbol()}
   @type set :: MapSet.t()
@@ -19,8 +19,8 @@ defmodule CSCompiler.CFG do
       raise ArgumentError, "every nonterminal must be an atom"
     end
 
-    unless Enum.all?(vt, &(&1 >= 0 and &1 <= 0x10FFFF)) do
-      raise ArgumentError, "every terminal must be a valid unicode character"
+    unless Enum.all?(vt, &not(is_atom(&1))) do
+      raise ArgumentError, "every terminal must not be an atom"
     end
 
     vn_set = MapSet.new(vn)
