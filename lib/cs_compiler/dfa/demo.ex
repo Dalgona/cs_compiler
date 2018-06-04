@@ -156,6 +156,67 @@ defmodule CSCompiler.DFA.Demo do
   defp build_integer(:hex, acc, char), do: acc * 16 + hex2num(char)
   defp build_integer(_state, acc, _char), do: acc
 
+  @spec multiple_tokens(charlist()) :: any()
+  def multiple_tokens(chars) do
+    d = dfa_fn do
+      :ws,   ?\s -> :ws
+      :ws,   [?1..?9] -> :dec
+      :dec,  [?1..?9] -> :dec
+      :ws,   ?0 -> :zero
+      :zero, [?0..?7] -> :oct
+      :oct,  [?0..?7] -> :oct
+      :zero, 'Xx' -> :x
+      :x,    [?0..?9, ?A..?F, ?a..?f] -> :hex
+      :hex,  [?0..?9, ?A..?F, ?a..?f] -> :hex
+      :ws,   ?( -> :lparen
+      :ws,   ?) -> :rparen
+      :ws,   ?+ -> :plus
+      :ws,   ?* -> :asterisk
+    end
+
+    dfa = DFA.new(
+      [:ws, :dec, :zero, :oct, :x, :hex, :lparen, :rparen, :plus, :asterisk],
+      ' 0123456789ABCDEFabcdefXx()*+',
+      d,
+      :ws,
+      [:dec, :zero, :oct, :hex, :lparen, :rparen, :plus, :asterisk]
+    )
+
+    do_analysis(dfa, chars, [])
+  end
+
+  @spec do_analysis(DFA.t(), charlist(), [term()]) :: {:ok, [term()]} | {:error, charlist()}
+  defp do_analysis(dfa, chars, tokens)
+
+  defp do_analysis(_dfa, [], tokens) do
+    {:ok, Enum.reverse(tokens)}
+  end
+
+  defp do_analysis(dfa, chars, tokens) do
+    case DFA.run_multiple(dfa, chars, nil, &mt_hook/3) do
+      {:accepted, token, rest_chars} ->
+        do_analysis(dfa, rest_chars, [token | tokens])
+
+      {:rejected, _, rest_chars} ->
+        {:error, rest_chars}
+    end
+  end
+
+  @spec mt_hook(DFA.state(), term(), char()) :: term()
+  defp mt_hook(state, acc, char)
+
+  defp mt_hook(:dec, {:int_const, val}, char), do: {:int_const, val * 10 + (char - ?0)}
+  defp mt_hook(:dec, nil, char), do: {:int_const, char - ?0}
+  defp mt_hook(:zero, nil, ?0), do: {:int_const, 0}
+  defp mt_hook(:oct, {:int_const, val}, char), do: {:int_const, val * 8 + (char - ?0)}
+  defp mt_hook(:oct, nil, char), do: {:int_const, char - ?0}
+  defp mt_hook(:hex, {:int_const, val}, char), do: {:int_const, val * 16 + hex2num(char)}
+  defp mt_hook(:lparen, nil, ?(), do: {:paren_left, nil}
+  defp mt_hook(:rparen, nil, ?)), do: {:paren_right, nil}
+  defp mt_hook(:plus, nil, ?+), do: {:plus, nil}
+  defp mt_hook(:asterisk, nil, ?*), do: {:asterisk, nil}
+  defp mt_hook(_state, acc, _char), do: acc
+
   @spec hex2num(integer()) :: integer()
   defp hex2num(char) when char in ?0..?9, do: char - ?0
   defp hex2num(char) when char in ?A..?F, do: char - ?A + 10
