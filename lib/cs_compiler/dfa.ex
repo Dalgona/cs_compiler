@@ -199,4 +199,35 @@ defmodule CSCompiler.DFA do
         do_run(dfa, new_state, chars, hook_fn.(new_state, acc, char), hook_fn)
     end
   end
+
+  @spec run_multiple(t(), charlist(), term(), hook_fn()) :: result()
+  def run_multiple(dfa, chars, acc \\ nil, hook_fn \\ fn _, a, _ -> a end)
+
+  def run_multiple(dfa, chars, acc, hook_fn) do
+    do_run_multiple(dfa, dfa.initial_state, chars, acc, hook_fn)
+  end
+
+  defp do_run_multiple(dfa, state, [], acc, _hook_fn) do
+    if MapSet.member?(dfa.accepted_states, state) do
+      {:accepted, acc, []}
+    else
+      {:rejected, acc, []}
+    end
+  end
+
+  defp do_run_multiple(dfa, state, [char | chars], acc, hook_fn) do
+    case dfa.transition_fn.(state, char) do
+      nil ->
+        if MapSet.member?(dfa.accepted_states, state) do
+          {:accepted, acc, [char | chars]}
+        else
+          {:rejected, acc, [char | chars]}
+        end
+
+      new_state ->
+        new_acc = hook_fn.(new_state, acc, char)
+
+        do_run_multiple(dfa, new_state, chars, new_acc, hook_fn)
+    end
+  end
 end
